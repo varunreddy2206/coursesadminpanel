@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Step1BasicDetails from '../components/add-course/Step1BasicDetails';
 import Step2Curriculum from '../components/add-course/Step2Curriculum';
+import { API } from '../../../../core/url';
 
 const AddCourseScreen = () => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -193,7 +194,7 @@ const AddCourseScreen = () => {
             data.append('discount', formData.pricing.discountPrice);
 
             // Send Request
-            const response = await axios.post('http://localhost:8888/course/create', data, {
+            const response = await API.post('/course/create', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
