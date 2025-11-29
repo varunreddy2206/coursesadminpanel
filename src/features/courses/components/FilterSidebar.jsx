@@ -1,7 +1,33 @@
-import React from 'react';
-import { filterOptions } from '../data/coursesData';
+import React, { useState, useEffect } from 'react';
+import { courseAPI } from '../services/courseService';
+import { COURSE_CATEGORY, COURSE_LEVEL, TrainingOptions } from '../../../../core/filterdata';
 
 const FilterSidebar = ({ filters, onFilterChange, onApplyFilters, onClearFilters }) => {
+    const [filterOptions, setFilterOptions] = useState({
+        categories: Object.values(COURSE_CATEGORY),
+        trainingOptions: Object.values(TrainingOptions),
+        levels: Object.values(COURSE_LEVEL)
+    });
+    const [loading, setLoading] = useState(false);
+
+    // Fetch filter options from server
+    // useEffect(() => {
+    //     const fetchFilterOptions = async () => {
+    //         try {
+    //             const response = await courseAPI.getFilterOptions();
+    //             if (response.status) {
+    //                 setFilterOptions(response.data);
+    //             }
+    //         } catch (error) {
+    //             console.error('Failed to fetch filter options:', error);
+    //         } finally {
+    //             setLoading(false);
+    //         }
+    //     };
+
+    //     fetchFilterOptions();
+    // }, []);
+
     const handleCheckboxChange = (filterType, value) => {
         const currentValues = filters[filterType] || [];
         const newValues = currentValues.includes(value)
@@ -18,15 +44,30 @@ const FilterSidebar = ({ filters, onFilterChange, onApplyFilters, onClearFilters
         });
     };
 
+    if (loading) {
+        return (
+            <div className="w-56 bg-white p-5 rounded-2xl border border-gray-100 shadow-sm sticky top-20">
+                <div className="animate-pulse">
+                    <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                    <div className="space-y-3">
+                        <div className="h-4 bg-gray-200 rounded"></div>
+                        <div className="h-4 bg-gray-200 rounded"></div>
+                        <div className="h-4 bg-gray-200 rounded"></div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="w-56 bg-white p-5 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_30px_-4px_rgba(6,81,237,0.1)] sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto">
             <h3 className="text-lg font-bold text-gray-800 mb-5">Filters</h3>
 
-            {/* Mode Filter */}
+            {/* Training Mode Filter */}
             <div className="mb-5">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Mode</h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Training Mode</h4>
                 <div className="space-y-2">
-                    {filterOptions.modes.map((mode) => (
+                    {filterOptions.trainingOptions.map((mode) => (
                         <label key={mode} className="flex items-center gap-2 cursor-pointer group">
                             <input
                                 type="checkbox"
@@ -58,19 +99,19 @@ const FilterSidebar = ({ filters, onFilterChange, onApplyFilters, onClearFilters
                 </div>
             </div>
 
-            {/* Status Filter */}
+            {/* Level Filter */}
             <div className="mb-5">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">Status</h4>
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">Level</h4>
                 <div className="space-y-2">
-                    {filterOptions.statuses.map((status) => (
-                        <label key={status} className="flex items-center gap-2 cursor-pointer group">
+                    {filterOptions.levels.map((level) => (
+                        <label key={level} className="flex items-center gap-2 cursor-pointer group">
                             <input
                                 type="checkbox"
-                                checked={filters.statuses?.includes(status) || false}
-                                onChange={() => handleCheckboxChange('statuses', status)}
+                                checked={filters.levels?.includes(level) || false}
+                                onChange={() => handleCheckboxChange('levels', level)}
                                 className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer"
                             />
-                            <span className="text-sm text-gray-600 group-hover:text-gray-900">{status}</span>
+                            <span className="text-sm text-gray-600 group-hover:text-gray-900">{level}</span>
                         </label>
                     ))}
                 </div>
