@@ -193,7 +193,7 @@ const AddCourseScreen = () => {
             data.append('discount', formData.pricing.discountPrice);
 
             // Send Request
-            const response = await axios.post('http://localhost:8888/course/create', data, {
+            const response = await axios.post('https://itraining-backend.nuhvin.com/course/create', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
