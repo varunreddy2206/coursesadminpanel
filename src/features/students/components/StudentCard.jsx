@@ -52,11 +52,11 @@ const StudentCard = ({ student, layout = 'grid', onViewDetails }) => {
                     <div className="flex items-center gap-6 mb-3">
                         <div className="flex items-center gap-2 text-sm">
                             <BookOpen className="w-4 h-4 text-indigo-600" />
-                            <span className="text-gray-700">{student.enrolledCourses} Courses</span>
+                            <span className="text-gray-700">{student.enrolledCourses?.length || 0} Courses</span>
                         </div>
                         <div className="flex items-center gap-2 text-sm">
                             <Award className={`w-4 h-4 ${getPerformanceColor(student.performance)}`} />
-                            <span className="text-gray-700">Performance: <span className={`font-semibold ${getPerformanceColor(student.performance)}`}>{student.performance}/10</span></span>
+                            <span className="text-gray-700">Performance: <span className={`font-semibold ${getPerformanceColor(student.performance)}`}>{student.performance ?? 0}/10</span></span>
                         </div>
                         <div className="text-sm text-gray-500">
                             Last active: {student.lastActive}
@@ -124,14 +124,14 @@ const StudentCard = ({ student, layout = 'grid', onViewDetails }) => {
                             <BookOpen className="w-4 h-4 text-indigo-600" />
                             <span>Enrolled Courses</span>
                         </div>
-                        <span className="font-semibold text-gray-900">{student.enrolledCourses}</span>
+                        <span className="font-semibold text-gray-900">{student.enrolledCourses?.length || 0}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                         <div className="flex items-center gap-2 text-gray-600">
                             <Award className={`w-4 h-4 ${getPerformanceColor(student.performance)}`} />
                             <span>Performance</span>
                         </div>
-                        <span className={`font-semibold ${getPerformanceColor(student.performance)}`}>{student.performance}/10</span>
+                        <span className={`font-semibold ${getPerformanceColor(student.performance)}`}>{student.performance ?? 0}/10</span>
                     </div>
                 </div>
 

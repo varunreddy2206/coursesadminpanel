@@ -5,14 +5,19 @@ import BatchScheduler from './BatchScheduler';
 import PricingSection from './PricingSection';
 
 const Step2Curriculum = ({ formData, setFormData, onBack, onPublish, errors, isLoading }) => {
-    const [activeTab, setActiveTab] = useState('self-learning');
+    // Use trainingOption from formData instead of local state
+    const activeTab = formData.trainingOption;
 
     const tabs = [
-        { id: 'self-learning', label: 'Self Learning', icon: BookOpen },
-        { id: 'live-classes', label: 'Live Classes', icon: Video },
-        { id: 'classroom', label: 'Classroom Classes', icon: Building2 },
-        { id: 'corporate', label: 'Corporate', icon: Users },
+        { id: 'Self Learning', label: 'Self Learning', icon: BookOpen },
+        { id: 'Live Classes', label: 'Live Classes', icon: Video },
+        { id: 'Classroom Classes', label: 'Classroom Classes', icon: Building2 },
+        { id: 'Corporate', label: 'Corporate', icon: Users },
     ];
+
+    const handleTabChange = (tabId) => {
+        setFormData(prev => ({ ...prev, trainingOption: tabId }));
+    };
 
     const handleCurriculumChange = (modules) => {
         setFormData(prev => ({ ...prev, curriculum: modules }));
@@ -36,7 +41,7 @@ const Step2Curriculum = ({ formData, setFormData, onBack, onPublish, errors, isL
                     return (
                         <button
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
+                            onClick={() => handleTabChange(tab.id)}
                             className={`
                 flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200
                 ${isActive
@@ -58,10 +63,10 @@ const Step2Curriculum = ({ formData, setFormData, onBack, onPublish, errors, isL
                 <div className="lg:col-span-2 space-y-6">
                     <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm min-h-[500px]">
                         <h2 className="text-lg font-bold text-gray-800 mb-6">
-                            {activeTab === 'self-learning' ? 'Curriculum Builder' : 'Batch Schedule'}
+                            {activeTab === 'Self Learning' ? 'Curriculum Builder' : 'Batch Schedule'}
                         </h2>
 
-                        {activeTab === 'self-learning' && (
+                        {activeTab === 'Self Learning' && (
                             <CurriculumBuilder
                                 modules={formData.curriculum || []}
                                 onChange={handleCurriculumChange}
@@ -69,14 +74,14 @@ const Step2Curriculum = ({ formData, setFormData, onBack, onPublish, errors, isL
                             />
                         )}
 
-                        {(activeTab === 'live-classes' || activeTab === 'classroom') && (
+                        {(activeTab === 'Live Classes' || activeTab === 'Classroom Classes') && (
                             <BatchScheduler
                                 batches={formData.batches || []}
                                 onChange={handleBatchesChange}
                             />
                         )}
 
-                        {activeTab === 'corporate' && (
+                        {activeTab === 'Corporate' && (
                             <div className="text-center py-12 text-gray-500">
                                 Corporate training configuration coming soon...
                             </div>

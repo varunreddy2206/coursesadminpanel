@@ -6,12 +6,14 @@ import CourseListScreen from './features/courses/screens/CourseListScreen';
 import AddCourseScreen from './features/courses/screens/AddCourseScreen';
 import PaymentsScreen from './features/payments/screens/PaymentsScreen';
 import RegistrationsScreen from './features/registrations/screens/RegistrationsScreen';
+import LoginScreen from './features/auth/screens/LoginScreen';
 import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<LoginScreen />} />
         <Route path="/" element={<MainLayout />}>
           <Route index element={<DashboardScreen />} />
           <Route path="students" element={<StudentsScreen />} />
