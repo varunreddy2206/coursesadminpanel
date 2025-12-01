@@ -37,7 +37,7 @@ const Sidebar = () => {
                             to={item.path}
                             className={({ isActive }) =>
                                 `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                                    ? 'bg-indigo-50 text-indigo-600 shadow-sm'
+                                    ? ' text-indigo-600 '
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 }`
                             }
@@ -89,7 +89,7 @@ const Sidebar = () => {
                         to="/payments"
                         className={({ isActive }) =>
                             `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                ? 'bg-indigo-50 text-indigo-600 shadow-sm'
+                                ? ' text-indigo-600'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             }`
                         }
@@ -102,7 +102,7 @@ const Sidebar = () => {
                         to="/registrations"
                         className={({ isActive }) =>
                             `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${isActive
-                                ? 'bg-indigo-50 text-indigo-600 shadow-sm'
+                                ? ' text-indigo-600'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                             }`
                         }
