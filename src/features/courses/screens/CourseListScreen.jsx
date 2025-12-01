@@ -122,8 +122,6 @@ const CourseListScreen = () => {
         }
     };
 
-    console.log("courses----", courses[0]);
-
     return (
         <div className="space-y-6">
             <Toaster position="top-right" />

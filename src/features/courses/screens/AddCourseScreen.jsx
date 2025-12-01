@@ -4,6 +4,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import Step1BasicDetails from '../components/add-course/Step1BasicDetails';
 import Step2Curriculum from '../components/add-course/Step2Curriculum';
+import { API } from '../../../../core/url';
 
 const AddCourseScreen = () => {
     const [currentStep, setCurrentStep] = useState(1);
@@ -26,6 +27,7 @@ const AddCourseScreen = () => {
 
         curriculum: [],
         batches: [],
+        trainingOption: 'Self Learning', // Default value
         pricing: {
             basePrice: '',
             discountPrice: '',
@@ -60,55 +62,73 @@ const AddCourseScreen = () => {
             newErrors['pricing.basePrice'] = 'Base price is required';
         }
 
-        // Curriculum Validation
-        if (!formData.curriculum || formData.curriculum.length === 0) {
-            newErrors.curriculum = 'At least one module is required';
-        } else {
-            formData.curriculum.forEach((module, mIndex) => {
-                if (!module.title.trim()) {
-                    newErrors[`curriculum.${mIndex}.title`] = 'Module title is required';
-                }
+        // Conditional Validation based on Training Option
+        if (formData.trainingOption === 'Self Learning') {
+            // Curriculum Validation
+            if (!formData.curriculum || formData.curriculum.length === 0) {
+                newErrors.curriculum = 'At least one module is required';
+            } else {
+                formData.curriculum.forEach((module, mIndex) => {
+                    if (!module.title.trim()) {
+                        newErrors[`curriculum.${mIndex}.title`] = 'Module title is required';
+                    }
 
-                if (!module.lessons || module.lessons.length === 0) {
-                    newErrors[`curriculum.${mIndex}.lessons`] = 'At least one lesson is required in this module';
-                } else {
-                    module.lessons.forEach((lesson, lIndex) => {
-                        if (!lesson.title.trim()) {
-                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.title`] = 'Lesson title is required';
-                        }
-                        if (!lesson.duration.trim()) {
-                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.duration`] = 'Duration is required';
-                        }
-
-                        if (lesson.type === 'video' && !lesson.videoFile) {
-                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.videoFile`] = 'Video file is required';
-                        }
-                        if (lesson.type === 'material' && !lesson.materialFile) {
-                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.materialFile`] = 'Material file is required';
-                        }
-                        if (lesson.type === 'quiz') {
-                            if (!lesson.quiz || lesson.quiz.length === 0) {
-                                newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz`] = 'At least one question is required';
-                            } else {
-                                lesson.quiz.forEach((q, qIndex) => {
-                                    if (!q.question.trim()) {
-                                        newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz.${qIndex}.question`] = 'Question is required';
-                                    }
-                                    if (!q.answer.trim()) {
-                                        newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz.${qIndex}.answer`] = 'Answer is required';
-                                    }
-                                    q.options.forEach((opt, oIndex) => {
-                                        if (!opt.trim()) {
-                                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz.${qIndex}.options.${oIndex}`] = 'Option is required';
-                                        }
-                                    });
-                                });
+                    if (!module.lessons || module.lessons.length === 0) {
+                        newErrors[`curriculum.${mIndex}.lessons`] = 'At least one lesson is required in this module';
+                    } else {
+                        module.lessons.forEach((lesson, lIndex) => {
+                            if (!lesson.title.trim()) {
+                                newErrors[`curriculum.${mIndex}.lessons.${lIndex}.title`] = 'Lesson title is required';
                             }
-                        }
-                    });
-                }
-            });
+                            if (!lesson.duration.trim()) {
+                                newErrors[`curriculum.${mIndex}.lessons.${lIndex}.duration`] = 'Duration is required';
+                            }
+
+                            if (lesson.type === 'video' && !lesson.videoFile) {
+                                newErrors[`curriculum.${mIndex}.lessons.${lIndex}.videoFile`] = 'Video file is required';
+                            }
+                            if (lesson.type === 'material' && !lesson.materialFile) {
+                                newErrors[`curriculum.${mIndex}.lessons.${lIndex}.materialFile`] = 'Material file is required';
+                            }
+                            if (lesson.type === 'quiz') {
+                                if (!lesson.quiz || lesson.quiz.length === 0) {
+                                    newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz`] = 'At least one question is required';
+                                } else {
+                                    lesson.quiz.forEach((q, qIndex) => {
+                                        if (!q.question.trim()) {
+                                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz.${qIndex}.question`] = 'Question is required';
+                                        }
+                                        if (!q.answer.trim()) {
+                                            newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz.${qIndex}.answer`] = 'Answer is required';
+                                        }
+                                        q.options.forEach((opt, oIndex) => {
+                                            if (!opt.trim()) {
+                                                newErrors[`curriculum.${mIndex}.lessons.${lIndex}.quiz.${qIndex}.options.${oIndex}`] = 'Option is required';
+                                            }
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        } else if (formData.trainingOption === 'Live Classes' || formData.trainingOption === 'Classroom Classes') {
+            // Batches Validation
+            console.log("formData", formData);
+            if (!formData.batches || formData.batches.length === 0) {
+                newErrors.batches = 'At least one batch is required';
+            } else {
+                formData.batches.forEach((batch, index) => {
+                    if (!batch.batchTitle?.trim()) newErrors[`batches.${index}.batchTitle`] = 'Batch title is required';
+                    if (!batch.startDate) newErrors[`batches.${index}.startDate`] = 'Start date is required';
+                    if (!batch.endDate) newErrors[`batches.${index}.endDate`] = 'End date is required';
+                    if (!batch.timings?.trim()) newErrors[`batches.${index}.timings`] = 'Timings are required';
+                    if (!batch.seats) newErrors[`batches.${index}.seats`] = 'Seats count is required';
+                });
+            }
         }
+        console.log("newErrors", newErrors);
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -162,38 +182,44 @@ const AddCourseScreen = () => {
             }
 
             // Training Options
-            data.append('trainingOptions', 'Self Learning');
+            data.append('trainingOptions', formData.trainingOption);
 
-            // Curriculum & Videos/Materials
-            const curriculumForJson = formData.curriculum.map(module => ({
-                moduleTitle: module.title,
-                lessons: module.lessons.map(lesson => ({
-                    title: lesson.title,
-                    duration: lesson.duration,
-                    type: lesson.type,
-                    quiz: lesson.type === 'quiz' ? lesson.quiz : undefined
-                }))
-            }));
+            // Conditional Data Appending
+            if (formData.trainingOption === 'Self Learning') {
+                // Curriculum & Videos/Materials
+                const curriculumForJson = formData.curriculum.map(module => ({
+                    moduleTitle: module.title,
+                    lessons: module.lessons.map(lesson => ({
+                        title: lesson.title,
+                        duration: lesson.duration,
+                        type: lesson.type,
+                        quiz: lesson.type === 'quiz' ? lesson.quiz : undefined
+                    }))
+                }));
 
-            data.append('curriculum', JSON.stringify(curriculumForJson));
+                data.append('curriculum', JSON.stringify(curriculumForJson));
 
-            // Append files in order
-            formData.curriculum.forEach(module => {
-                module.lessons.forEach(lesson => {
-                    if (lesson.type === 'video' && lesson.videoFile) {
-                        data.append('lessonVideos', lesson.videoFile);
-                    } else if (lesson.type === 'material' && lesson.materialFile) {
-                        data.append('lessonMaterials', lesson.materialFile);
-                    }
+                // Append files in order
+                formData.curriculum.forEach(module => {
+                    module.lessons.forEach(lesson => {
+                        if (lesson.type === 'video' && lesson.videoFile) {
+                            data.append('lessonVideos', lesson.videoFile);
+                        } else if (lesson.type === 'material' && lesson.materialFile) {
+                            data.append('lessonMaterials', lesson.materialFile);
+                        }
+                    });
                 });
-            });
+            } else if (formData.trainingOption === 'Live Classes' || formData.trainingOption === 'Classroom Classes') {
+                // Batches
+                data.append('batches', JSON.stringify(formData.batches));
+            }
 
             // Pricing
             data.append('basePrice', formData.pricing.basePrice);
             data.append('discount', formData.pricing.discountPrice);
 
             // Send Request
-            const response = await axios.post('https://itraining-backend.nuhvin.com/course/create', data, {
+            const response = await API.post('/course/create', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -201,6 +227,7 @@ const AddCourseScreen = () => {
 
             if (response.data.status) {
                 toast.success('Course created successfully!', { id: loadingToast });
+                window.location.reload();
                 // Optional: Redirect or reset form
             } else {
                 toast.error('Failed to create course: ' + response.data.message, { id: loadingToast });
