@@ -46,7 +46,7 @@ const StudentsScreen = () => {
 
     return (
         <div className="space-y-6">
-            {/* Header */}
+
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 className="text-2xl font-bold text-gray-800">Students Management</h1>
@@ -59,18 +59,16 @@ const StudentsScreen = () => {
                 </button>
             </div>
 
-            {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {studentStats.map(stat => (
                     <StudentStatsCard key={stat.id} stat={stat} />
                 ))}
             </div>
 
-            {/* Search, Filter, and Controls */}
             <div className="flex items-center gap-3">
-                {/* Left side: Search and Filter */}
+
                 <div className="flex-1 flex gap-3">
-                    {/* Search Bar */}
+
                     <div className="flex-1 relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                         <input
@@ -82,7 +80,6 @@ const StudentsScreen = () => {
                         />
                     </div>
 
-                    {/* Status Filter */}
                     <div className="relative">
                         <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
                         <select

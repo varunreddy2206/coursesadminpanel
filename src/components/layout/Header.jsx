@@ -16,15 +16,15 @@ const Header = () => {
             </div>
 
             {/* Center: Search Bar */}
-            <div className="flex-1 max-w-2xl mx-auto">
-                <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                        type="text"
-                        placeholder="Search for anything..."
-                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm"
-                    />
-                </div>
+            <div className="flex-1 max-w-2xl h-[45px]  mx-auto flex items-center gap-2 rounded-xl  border-gray-200 border  px-2">
+
+                <Search className=" text-gray-400 w-5 h-5" />
+                <input
+                    type="text"
+                    placeholder="Search for anything..."
+                    className="  border-none   focus:outline-none transition-all text-sm"
+                />
+
             </div>
 
             {/* Right: Actions & Profile */}
@@ -46,10 +46,6 @@ const Header = () => {
                         alt="Profile"
                         className="w-9 h-9 rounded-full object-cover border-2 border-white shadow-sm"
                     />
-                    <div className="text-left hidden md:block">
-                        <p className="text-sm font-semibold text-gray-700">Tom Cook</p>
-                        <p className="text-xs text-gray-500">Admin</p>
-                    </div>
                     <ChevronDown className="w-4 h-4 text-gray-400" />
                 </button>
             </div>
